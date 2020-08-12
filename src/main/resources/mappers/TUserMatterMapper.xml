@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.laike.management.blog.mapper.TUserMatterMapper">
+
+    <!--void updateByUserIdAndMatterId(@Param("tUserMatter") TUserMatter tUserMatter);-->
+    <update id="updateByUserIdAndMatterId" parameterType="cn.laike.management.blog.entity.TUserMatter"
+            databaseId="oracle">
+        UPDATE
+        t_user_matter um
+        SET
+        um.important_one = #{tUserMatter.importantOne},
+        um.urgent_one = #{tUserMatter.urgentOne},
+        um.finish = #{tUserMatter.finish}
+        WHERE
+        um.user_id = #{tUserMatter.userId}
+        AND
+        um.matter_id = #{tUserMatter.matterId}
+
+    </update>
+
+    <!--List<Long> selectMatterIds(Long userId);-->
+    <select id="selectMatterIds" resultType="Long" databaseId="oracle">
+    SELECT
+    um.matter_id
+    FROM
+    t_user_matter um
+    WHERE
+    um.user_id = #{userId}
+    AND
+    um.finish = 0
+    </select>
+</mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.laike.management.blog.mapper.TUserMapper">
+
+    <!--String selectUsernameByUid(Integer userId);-->
+    <select id="selectUsernameByUid" databaseId="oracle" resultType="TUser">
+    SELECT
+    u.USERNAME,
+    u.NAME,
+    u.CREATE_TIME createTime,
+    d.DEPT_NAME,
+    LISTAGG(ur.ROLE_ID,',') WITHIN GROUP (ORDER BY ur.ROLE_ID) AS roleIds
+    FROM
+    T_USER u
+    LEFT JOIN T_DEPT d ON u.DEPT_ID = d.DEPT_ID
+    LEFT JOIN T_USER_ROLE ur ON ur.USER_ID = u.USER_ID
+    WHERE
+    u.USER_ID = #{userId}
+    GROUP BY
+    u.USERNAME,
+    u.NAME,
+    u.CREATE_TIME,
+    d.DEPT_NAME
+    </select>
+</mapper>

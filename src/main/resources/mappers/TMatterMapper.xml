@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.laike.management.blog.mapper.TMatterMapper">
+    <sql id="findMatterDetailSql">
+        SELECT
+        m.MATTER_ID matterId,
+        m.MATTER_NAME matterName,
+        m.MATTER_TEXT matterText,
+        m.MATTER_OPEN matterOpen,
+        m.END,
+        m.IS_OPEN isOpen,
+        m.IMPORTANT,
+        m.URGENT,
+        m.PERIOD,
+        m.DEPT_ID deptId,
+        m.CREATE_TIME createTime,
+        d.DEPT_NAME deptName,
+        um.IMPORTANT_ONE importantOne,
+        um.URGENT_ONE urgentOne,
+        um.FINISH,
+        LISTAGG(r.REMIND_ID,',') WITHIN GROUP (ORDER BY r.REMIND_ID) AS remindId
+        FROM
+        T_MATTER m
+        LEFT JOIN T_DEPT d ON (m.DEPT_ID = d.DEPT_ID)
+        LEFT JOIN T_REMIND r ON (r.MATTER_ID = m.MATTER_ID)
+        LEFT JOIN T_USER_MATTER um ON (um.MATTER_ID = m.MATTER_ID)
+        WHERE 1 = 1
+        <if test="tMatter.matterName != null and tMatter.matterName != ''">
+            AND m.MATTER_NAME = #{tMatter.matterName}
+        </if>
+        <if test="tMatter.deptId != null and tMatter.deptId != ''">
+            AND m.DEPT_ID = #{tMatter.deptId}
+        </if>
+        <if test="tMatter.isOpen != null">
+            AND m.IS_OPEN = #{tMatter.isOpen}
+        </if>
+        <if test="tMatter.important != null">
+            AND m.IMPORTANT = #{tMatter.important}
+        </if>
+        <if test="tMatter.urgent != null">
+            AND m.URGENT = #{tMatter.urgent}
+        </if>
+        <if test="tMatter.matterId != null and tMatter.matterId != ''">
+            AND m.MATTER_ID = #{tMatter.matterId}
+        </if>
+        <if test="tMatter.userId!= null and tMatter.userId !=''">
+            And um.USER_ID = #{tMatter.userId}
+        </if>
+        <if test="tMatter.finish!= null">
+            And um.FINISH = #{tMatter.finish}
+        </if>
+        GROUP BY
+        m.MATTER_ID,
+        m.MATTER_NAME,
+        m.MATTER_TEXT,
+        m.MATTER_OPEN,
+        m.END,
+        m.IS_OPEN,
+        m.IMPORTANT,
+        m.URGENT,
+        m.PERIOD,
+        m.DEPT_ID,
+        m.CREATE_TIME,
+        d.DEPT_NAME,
+        um.IMPORTANT_ONE,
+        um.URGENT_ONE,
+        um.FINISH
+    </sql>
+
+    <!--List<TMatter> selectMattersByMatter(@Param(value = "tMatter") TMatter tMatter);;-->
+    <select id="selectMattersByMatter" parameterType="cn.laike.management.blog.entity.TMatter"
+            resultType="cn.laike.management.blog.entity.TMatter" databaseId="oracle">
+        <include refid="findMatterDetailSql"/>
+    </select>
+
+    <!--String selectMatterName(TMatter tMatter);-->
+    <select id="selectMatterName" parameterType="cn.laike.management.blog.entity.TMatter"
+            resultType="String" databaseId="oracle">
+    SELECT
+    m.MATTER_NAME
+    FROM
+    T_MATTER m
+    WHERE
+    m.MATTER_ID=#{tMatter.matterId}
+    </select>
+
+</mapper>
