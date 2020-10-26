@@ -45,9 +45,15 @@ public class TMatter implements Serializable {
     @TableField("MATTER_OPEN")
     private Date matterOpen;
 
+    @TableField(exist = false)
+    private String matterOpenStr;
+
     @ApiModelProperty(value = "结束时间")
     @TableField("END")
     private Date end;
+
+    @TableField(exist = false)
+    private String endStr;
 
     @ApiModelProperty(value = "重要程度  0不重要1重要 默认0")
     @TableField("IMPORTANT")
@@ -69,6 +75,12 @@ public class TMatter implements Serializable {
     @TableField("IS_OPEN")
     private Integer isOpen;
 
+    /**
+     * 是否是父事项 0不是1是
+     */
+    @TableField("IS_PATRIARCH")
+    private Integer isPatriarch;
+
     @TableField(value = "CREATE_TIME", fill = FieldFill.INSERT)
     private Date createTime;
 
@@ -81,6 +93,16 @@ public class TMatter implements Serializable {
     @TableField(exist = false)
     private String deptName;
 
+    /**
+     * 升序降序条件
+     */
+    @TableField(exist = false)
+    private String order;
+    /**
+     * 排序列
+     */
+    @TableField(exist = false)
+    private String status;
     /**
      * 用于查询条件的责任人Id
      */
@@ -117,8 +139,22 @@ public class TMatter implements Serializable {
     @TableField(exist = false)
     private Integer finish;
 
+
+    /**
+     * 该事项对于个人是否标记
+     */
+    @TableField(exist = false)
+    private Integer SIGN;
+
     public Long getId() {
         return matterId;
     }
+
+    /**
+     * 是否循环 默认0 0不循环 1循环
+     */
+    @TableField("FOR_EACH")
+    private Integer forEach;
+
 
 }

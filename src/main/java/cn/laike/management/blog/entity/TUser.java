@@ -50,7 +50,7 @@ public class TUser implements Serializable {
 
     @ApiModelProperty(value = "用户员工号")
     @TableField("USER_EMPNO")
-    private Long userEmpno;
+    private String  userEmpno;
 
     @ApiModelProperty(value = "职务")
     @TableField("POST")

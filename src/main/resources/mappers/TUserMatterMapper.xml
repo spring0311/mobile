@@ -4,22 +4,36 @@
 
     <!--void updateByUserIdAndMatterId(@Param("tUserMatter") TUserMatter tUserMatter);-->
     <update id="updateByUserIdAndMatterId" parameterType="cn.laike.management.blog.entity.TUserMatter"
-            databaseId="oracle">
+            >
         UPDATE
         t_user_matter um
         SET
         um.important_one = #{tUserMatter.importantOne},
         um.urgent_one = #{tUserMatter.urgentOne},
-        um.finish = #{tUserMatter.finish}
+        um.finish = #{tUserMatter.finish},
+        um.SIGN = #{tUserMatter.SIGN}
         WHERE
         um.user_id = #{tUserMatter.userId}
         AND
         um.matter_id = #{tUserMatter.matterId}
-
     </update>
-
+ <update id="updateByUserIdAndMatterIds" parameterType="cn.laike.management.blog.entity.TUserMatter"
+            >
+        UPDATE
+        t_user_matter um
+        SET
+        um.important_one = #{tUserMatter.importantOne},
+        um.urgent_one = #{tUserMatter.urgentOne},
+        um.finish = #{tUserMatter.finish},
+        um.SIGN = #{tUserMatter.SIGN},
+         um.ACTUALLY_TIME = #{tUserMatter.actuallyTime}
+        WHERE
+        um.user_id = #{tUserMatter.userId}
+        AND
+        um.matter_id = #{tUserMatter.matterId}
+    </update>
     <!--List<Long> selectMatterIds(Long userId);-->
-    <select id="selectMatterIds" resultType="Long" databaseId="oracle">
+    <select id="selectMatterIds" resultType="Long">
     SELECT
     um.matter_id
     FROM

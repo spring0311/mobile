@@ -4,6 +4,7 @@ import cn.laike.management.blog.entity.TMatter;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -30,7 +31,7 @@ public interface TMatterService extends IService<TMatter> {
      *
      * @param tMatter
      */
-    void createMatter(TMatter tMatter);
+    void createMatter(TMatter tMatter) throws ParseException;
 
     /**
      * 修改matter
@@ -38,7 +39,7 @@ public interface TMatterService extends IService<TMatter> {
      * @param tMatter
      */
     void updateMatter(TMatter tMatter);
-
+    void updateMatters(TMatter tMatter);
     /**
      * 删除
      *

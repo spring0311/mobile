@@ -5,6 +5,7 @@ import cn.laike.management.blog.entity.TUser;
 import cn.laike.management.blog.service.TUserService;
 import cn.laike.management.blog.util.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,7 @@ import javax.servlet.http.HttpSession;
  */
 @RestController
 @RequestMapping("user")
+@CrossOrigin
 public class TUserController extends BaseController {
 
     @Autowired

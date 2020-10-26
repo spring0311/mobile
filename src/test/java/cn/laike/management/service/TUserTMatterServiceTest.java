@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class TUserTMatterServiceTest {
      * tUserMatterMapper.insert(tUserMatter);
      */
     @Test
-    public void name() {
+    public void name() throws ParseException {
         TMatter tMatter = new TMatter();
         tMatter.setMatterName("测试插入");
         tMatter.setCreateTime(new Date());
@@ -54,7 +55,7 @@ public class TUserTMatterServiceTest {
     private TRemindService tRemindService;
 
     @Test
-    public void addRemind() {
+    public void addRemind() throws ParseException {
         TRemind remind = new TRemind();
         remind.setMatterId(49L);
         remind.setRemindTime(new Date());

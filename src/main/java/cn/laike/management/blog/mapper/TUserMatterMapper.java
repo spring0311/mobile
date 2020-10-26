@@ -21,7 +21,7 @@ public interface TUserMatterMapper extends BaseMapper<TUserMatter> {
      * @param tUserMatter
      */
     void updateByUserIdAndMatterId(@Param("tUserMatter") TUserMatter tUserMatter);
-
+    void updateByUserIdAndMatterIds(@Param("tUserMatter") TUserMatter tUserMatter);
     /**
      * 根据userId查询matterId
      *

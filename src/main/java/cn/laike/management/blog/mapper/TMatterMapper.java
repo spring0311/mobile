@@ -6,6 +6,14 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+/**
+ * <p>
+ * Mapper 接口
+ * </p>
+ *
+ * @author weiZiHao
+ * @since 2020-08-01
+ */
 public interface TMatterMapper extends BaseMapper<TMatter> {
 
 
@@ -21,4 +29,10 @@ public interface TMatterMapper extends BaseMapper<TMatter> {
      * 查找matterName
      */
     String selectMatterName(@Param("tMatter") TMatter tMatter);
+
+    /**
+     * 查询最大ID
+     * @return
+     */
+    Long selectMaxMatterId();
 }

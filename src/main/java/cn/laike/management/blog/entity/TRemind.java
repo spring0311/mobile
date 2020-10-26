@@ -36,16 +36,36 @@ public class TRemind implements Serializable {
     @ApiModelProperty(value = "提醒时间yyyy-MM-dd")
     @TableField("REMIND_TIME")
     private Date remindTime;
-
+    @TableField(exist = false)
+    private String remindTimestr;
     @ApiModelProperty(value = "事务Id")
     @TableField("MATTER_ID")
     private Long matterId;
-
+    /**
+     * 用于查询条件的责任人Id
+     */
+   /* @TableField(exist = false)
+    private Long userId;*/
     /**
      * 事项名称
      */
     @TableField(exist = false)
     private TMatter tMatter;
+
+    /**
+     * 是否激活 0否1是
+     */
+    @TableId("IS_ACTIVATE")
+    private Integer isActivate;
+
+    @TableField("USER_ID")
+    private Long userId;
+
+    /**
+     * 是否用户创建 是否是个人创建 0不是1是
+     */
+    @TableId("USER_BY")
+    private Integer userBy;
 
 
 }

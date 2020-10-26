@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InterceptorConfigration /*implements WebMvcConfigurer */ {
+public class InterceptorConfigration implements WebMvcConfigurer  {
 
 
     public void addInterceptors(InterceptorRegistry registry) {

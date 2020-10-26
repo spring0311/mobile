@@ -2,10 +2,13 @@ package cn.laike.management.blog.service.impl;
 
 import cn.laike.management.blog.entity.TMatter;
 import cn.laike.management.blog.entity.TRemind;
+import cn.laike.management.blog.entity.TUserMatter;
 import cn.laike.management.blog.mapper.TMatterMapper;
 import cn.laike.management.blog.mapper.TRemindMapper;
 import cn.laike.management.blog.mapper.TUserMatterMapper;
 import cn.laike.management.blog.service.TRemindService;
+import cn.laike.management.blog.service.ex.UserNotFoundException;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,23 +66,83 @@ public class TRemindServiceImpl extends ServiceImpl<TRemindMapper, TRemind> impl
         for (Long matterId : matterIds
         ) {
             map.clear();
-            map.put("matter_id", matterId);
+            map.put("MATTER_ID", matterId);
+            map.put("MATTER_ID", matterId);
             List<TRemind> list = tRemindMapper.selectByMap(map);
             tReminds.addAll(list);
         }
         //Remind 注入 Matter
-        TMatter tMatter = new TMatter();
         for (TRemind t : tReminds
         ) {
-            tMatter = tMatterMapper.selectById(t.getMatterId());
+            TMatter tMatter = new TMatter();
+            tMatter.setMatterId(t.getMatterId());
+            tMatter.setIsOpen(0);
+            // tMatter = tMatterMapper.selectMattersByMatter(tMatter).get(0);
+            List<TMatter> tmatter = tMatterMapper.selectMattersByMatter(tMatter);
+            if (tmatter.size() <= 0) {
+                tMatter = new TMatter();
+            } else {
+                tMatter = tMatterMapper.selectMattersByMatter(tMatter).get(0);
+            }
             t.setTMatter(tMatter);
         }
         return tReminds;
     }
 
     @Override
-    public void addRemind(TRemind tRemind) {
+    public List<TRemind> getByremindtime(TRemind tRemindy) throws ParseException {
+        List<TRemind> tReminds = new ArrayList<>();
+        Map<String, Object> map = new HashMap<>();
+        List<Long> matterIds = tUserMatterMapper.selectMatterIds(tRemindy.getUserId());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        TRemind tRemind = new TRemind();
+        tRemind.setRemindTime(simpleDateFormat.parse(tRemindy.getRemindTimestr()));
+        for (Long matterId : matterIds
+        ) {
+            //  map.clear();
+            map.put("matter_id", matterId);
+            map.put("REMIND_TIME", tRemind.getRemindTime());
+            List<TRemind> list = tRemindMapper.selectByMap(map);
+            tReminds.addAll(list);
+        }
+        //  map.put("REMIND_TIME", tRemind.getRemindTime());
+        //   List<TRemind> list = tRemindMapper.selectByMap(map);
+        //   tReminds.addAll(list);
+        for (TRemind t : tReminds
+        ) {
+            TMatter tMatter = new TMatter();
+            tMatter.setMatterId(t.getMatterId());
+            tMatter.setIsOpen(0);
+            List<TMatter> tmatter = tMatterMapper.selectMattersByMatter(tMatter);
+            if (tmatter.size() <= 0) {
+                tMatter = new TMatter();
+            } else {
+                tMatter = tMatterMapper.selectMattersByMatter(tMatter).get(0);
+            }
+            t.setTMatter(tMatter);
+        }
+        return tReminds;
+    }
+
+    @Override
+    public void addRemind(TRemind tRemind) throws ParseException {
+        QueryWrapper<TRemind> remindQueryWrapper = new QueryWrapper<>();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        tRemind.setRemindTime(simpleDateFormat.parse(tRemind.getRemindTimestr()));
+        remindQueryWrapper.setEntity(tRemind);
+        List<TRemind> list = baseMapper.selectList(remindQueryWrapper);
+        if (list.size() > 0) {
+            throw new UserNotFoundException("提醒时间已存在");
+        }
+        tRemind.setIsActivate(1);
+        tRemind.setUserBy(1);
         tRemindMapper.insert(tRemind);
+        QueryWrapper<TUserMatter> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("MATTER_ID", tRemind.getMatterId());
+        queryWrapper.eq("USER_ID", tRemind.getUserId());
+        TUserMatter tUserMatter = new TUserMatter();
+        tUserMatter.setIsRemind(1);
+        tUserMatterMapper.update(tUserMatter, queryWrapper);
     }
 
     @Override
@@ -93,6 +156,14 @@ public class TRemindServiceImpl extends ServiceImpl<TRemindMapper, TRemind> impl
             tReminds.add(tRemind);
         }
         return tReminds;
+    }
+
+    @Override
+    public List<TRemind> getBymatterId(Long matterId) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("MATTER_ID", matterId);
+        List<TRemind> tRemind = tRemindMapper.selectByMap(map);
+        return tRemind;
     }
 
     @Override

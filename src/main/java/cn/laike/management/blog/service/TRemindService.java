@@ -32,13 +32,21 @@ public interface TRemindService extends IService<TRemind> {
      * @return
      */
     List<TRemind> findAllTReminds(Long userId);
+    /**
+     * 根据提醒时间查询用户的所有信息
+     *
+     * @return
+     * @throws ParseException 
+     */
+    List<TRemind> getByremindtime(TRemind tRemind) throws ParseException;
 
     /**
      * 增加
      *
      * @param tRemind
+     * @throws ParseException 
      */
-    void addRemind(TRemind tRemind);
+    void addRemind(TRemind tRemind) throws ParseException;
 
     /**
      * 查询单个Matter的Reminds
@@ -47,10 +55,17 @@ public interface TRemindService extends IService<TRemind> {
      * @return
      */
     List<TRemind> findRemindForMatter(String remindId);
-
+    /**
+     * 查询单个Matter的Reminds
+     *
+     * @param remindId 从Matter中拿到的remindId
+     * @return
+     */
+    List<TRemind> getBymatterId(Long matterId);
     /**
      * 根据remind删除
      * @param remindId
      */
     void delByRemindId(Long remindId);
+
 }

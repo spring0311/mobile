@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.laike.management.blog.mapper.TMatterMapper">
+
     <sql id="findMatterDetailSql">
         SELECT
         m.MATTER_ID matterId,
@@ -10,23 +11,29 @@
         m.END,
         m.IS_OPEN isOpen,
         m.IMPORTANT,
+        m.IS_PATRIARCH isPatriarch,
         m.URGENT,
+        um.ACTUALLY_TIME,
         m.PERIOD,
         m.DEPT_ID deptId,
         m.CREATE_TIME createTime,
         d.DEPT_NAME deptName,
         um.IMPORTANT_ONE importantOne,
         um.URGENT_ONE urgentOne,
-        um.FINISH,
+        um.FINISH,um.SIGN,m.FOR_EACH,
         LISTAGG(r.REMIND_ID,',') WITHIN GROUP (ORDER BY r.REMIND_ID) AS remindId
         FROM
         T_MATTER m
         LEFT JOIN T_DEPT d ON (m.DEPT_ID = d.DEPT_ID)
         LEFT JOIN T_REMIND r ON (r.MATTER_ID = m.MATTER_ID)
         LEFT JOIN T_USER_MATTER um ON (um.MATTER_ID = m.MATTER_ID)
+        LEFT JOIN t_USER u ON (u.USER_ID = um.USER_ID)
         WHERE 1 = 1
         <if test="tMatter.matterName != null and tMatter.matterName != ''">
-            AND m.MATTER_NAME = #{tMatter.matterName}
+            AND m.MATTER_NAME like CONCAT(CONCAT('%',#{tMatter.matterName}),'%')
+        </if>
+        <if test="tMatter.isPatriarch != null ">
+            AND m.IS_PATRIARCH = #{tMatter.isPatriarch}
         </if>
         <if test="tMatter.deptId != null and tMatter.deptId != ''">
             AND m.DEPT_ID = #{tMatter.deptId}
@@ -49,12 +56,23 @@
         <if test="tMatter.finish!= null">
             And um.FINISH = #{tMatter.finish}
         </if>
+        <if test="tMatter.SIGN!= null">
+            And um.SIGN = #{tMatter.SIGN}
+        </if>
+        <if test="tMatter.matterOpenStr != null and tMatter.matterOpenStr !=''">
+            AND TO_CHAR(m.MATTER_OPEN , 'yyyy-MM-dd') = #{tMatter.matterOpenStr}
+        </if>
+        <if test="tMatter.endStr != null and tMatter.endStr !=''">
+            AND TO_CHAR(m.END , 'yyyy-MM-dd') = #{tMatter.endStr}
+        </if>
         GROUP BY
-        m.MATTER_ID,
+        m.MATTER_OPEN,
+        m.IS_PATRIARCH ,
+        m.END,
+        um.ACTUALLY_TIME,
+        m.MATTER_ID ,
         m.MATTER_NAME,
         m.MATTER_TEXT,
-        m.MATTER_OPEN,
-        m.END,
         m.IS_OPEN,
         m.IMPORTANT,
         m.URGENT,
@@ -64,18 +82,39 @@
         d.DEPT_NAME,
         um.IMPORTANT_ONE,
         um.URGENT_ONE,
-        um.FINISH
+        um.FINISH,um.SIGN,m.FOR_EACH
+        <if test='tMatter.order ==null and tMatter.status==null '>
+            order by m.MATTER_OPEN DESC
+        </if>
+        <if test='tMatter.order == "1" and tMatter.status=="1" '>
+            order by m.CREATE_TIME DESC
+        </if>
+        <if test='tMatter.order == "0" and tMatter.status=="1" '>
+            order by m.CREATE_TIME
+        </if>
+        <if test='tMatter.order == "1" and tMatter.status=="2" '>
+            order by m.END DESC
+        </if>
+        <if test='tMatter.order =="0" and tMatter.status=="2" '>
+            order by m.END
+        </if>
+        <if test='tMatter.order == "1" and tMatter.status=="3" '>
+            order by um.ACTUALLY_TIME DESC
+        </if>
+        <if test='tMatter.order =="0" and tMatter.status=="3" '>
+            order by um.ACTUALLY_TIME
+        </if>
     </sql>
 
-    <!--List<TMatter> selectMattersByMatter(@Param(value = "tMatter") TMatter tMatter);;-->
-    <select id="selectMattersByMatter" parameterType="cn.laike.management.blog.entity.TMatter"
-            resultType="cn.laike.management.blog.entity.TMatter" databaseId="oracle">
+    <!-- List<TMatter> selectMattersByMatter(@Param(value = "tMatter") TMatter tMatter);-->
+    <select id="selectMattersByMatter" parameterType="TMatter"
+            resultType="TMatter">
         <include refid="findMatterDetailSql"/>
     </select>
 
     <!--String selectMatterName(TMatter tMatter);-->
-    <select id="selectMatterName" parameterType="cn.laike.management.blog.entity.TMatter"
-            resultType="String" databaseId="oracle">
+    <select id="selectMatterName" parameterType="TMatter"
+            resultType="String">
     SELECT
     m.MATTER_NAME
     FROM
@@ -83,5 +122,11 @@
     WHERE
     m.MATTER_ID=#{tMatter.matterId}
     </select>
+
+    <!--Long selectMaxMatterId();-->
+    <select id="selectMaxMatterId" resultType="Long">
+        select max(to_number(MATTER_ID)) from T_MATTER;
+    </select>
+
 
 </mapper>

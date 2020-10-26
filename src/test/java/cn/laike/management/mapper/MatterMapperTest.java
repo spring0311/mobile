@@ -1,8 +1,10 @@
 package cn.laike.management.mapper;
 
 import cn.laike.management.blog.entity.TMatter;
+import cn.laike.management.blog.entity.TRemind;
 import cn.laike.management.blog.entity.TUser;
 import cn.laike.management.blog.mapper.TMatterMapper;
+import cn.laike.management.blog.mapper.TRemindMapper;
 import cn.laike.management.blog.mapper.TUserMapper;
 import cn.laike.management.blog.mapper.TUserMatterMapper;
 import org.junit.jupiter.api.Test;
@@ -66,9 +68,16 @@ class MatterMapperTest {
     @Autowired
     private TUserMapper tUserMapper;
 
+    @Autowired
+    private TRemindMapper tRemindMapper;
+
     @Test
     public void testOracle() {
-        TUser tUser = tUserMapper.selectUsernameByUid(7L);
-        System.err.println(tUser);
+        TRemind test = new TRemind();
+        test.setMatterId(14l);
+        List<TRemind> tReminds = tRemindMapper.testSelect(test);
+        tReminds.forEach(tRemind -> System.err.println(tRemind));
     }
+
+
 }

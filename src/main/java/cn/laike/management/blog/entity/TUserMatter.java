@@ -3,6 +3,7 @@ package cn.laike.management.blog.entity;
 import com.baomidou.mybatisplus.annotation.*;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -52,5 +53,15 @@ public class TUserMatter implements Serializable {
     @TableField("Finish")
     private Integer finish;
 
+    @ApiModelProperty(value = "是否标记 0未标记 1标记 默认未标记")
+    @TableField("SIGN")
+    private Integer SIGN;
 
+    @ApiModelProperty(value = "完成时间")
+    @TableField("ACTUALLY_TIME")
+    private Date actuallyTime;
+
+    @ApiModelProperty(value = "是否根据 总提醒时间修改 0是1不是")
+    @TableId("IS_REMIND")
+    private Integer isRemind;
 }
