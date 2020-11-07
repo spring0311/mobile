@@ -6,6 +6,7 @@ import java.util.Date;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -34,10 +35,14 @@ public class TRemind implements Serializable {
     private Long remindId;
 
     @ApiModelProperty(value = "提醒时间yyyy-MM-dd")
+    @JsonFormat(pattern = "MM-dd", timezone = "GMT+8")
     @TableField("REMIND_TIME")
     private Date remindTime;
+
     @TableField(exist = false)
     private String remindTimestr;
+
+
     @ApiModelProperty(value = "事务Id")
     @TableField("MATTER_ID")
     private Long matterId;
