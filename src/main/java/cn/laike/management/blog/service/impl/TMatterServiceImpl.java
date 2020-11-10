@@ -74,8 +74,8 @@ public class TMatterServiceImpl extends ServiceImpl<TMatterMapper, TMatter> impl
         //修改映射表状态
         TUserMatter tUserMatter = new TUserMatter();
         tUserMatter.setFinish(tMatter.getFinish());
-        tUserMatter.setImportantOne(tMatter.getImportantOne());
-        tUserMatter.setUrgentOne(tMatter.getUrgentOne());
+        tUserMatter.setImportantOne(tMatter.getImportant());
+        tUserMatter.setUrgentOne(tMatter.getUrgent());
         tUserMatter.setMatterId(tMatter.getMatterId());
         tUserMatter.setFinish(tMatter.getFinish());
         tUserMatter.setUserId(tMatter.getUserId());
