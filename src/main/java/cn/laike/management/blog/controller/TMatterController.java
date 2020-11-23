@@ -60,13 +60,13 @@ public class TMatterController extends BaseController {
 
     //http://192.168.56.1:8080/matter/add?matterName=测试&matterText=修改测试&important=1&urgent=1
     @GetMapping("add")
-    public JsonResult<Void> addMatter(TMatter tMatter, HttpSession session) throws ParseException {
+    public JsonResult<Long> addMatter(TMatter tMatter, HttpSession session) throws ParseException {
         tMatter.setUserId(getUidFromSessions(tMatter.getUserId()));
         // tMatter.setUserId(1L);
         tMatter.setIsPatriarch(0);
         tMatter.setDeptId(0l);
         tMatterService.createMatter(tMatter);
-        return new JsonResult<>(OK);
+        return new JsonResult<>(OK, tMatter.getMatterId() + 1);
     }
 
     //http://localhost:8080/matter/matter?matterId=14&deptId=1&urgent=1

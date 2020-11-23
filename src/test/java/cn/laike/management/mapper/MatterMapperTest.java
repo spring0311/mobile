@@ -59,10 +59,15 @@ class MatterMapperTest {
 
     @Test
     public void selectMatterIds() {
-        List<Long> matterIds = tUserMatterMapper.selectMatterIds(1L);
-        matterIds.forEach(matterId -> {
-            System.err.println(matterId);
-        });
+        Double j = 0.00;
+        for (Double i = 0.10; i <= 1.12; i = i + 0.01) {
+            j = j + i;
+        }
+        /**
+         * 0.43  0.44  0.87
+         */
+        System.err.println();
+        System.err.println(j-0.87);
     }
 
     @Autowired
