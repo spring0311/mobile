@@ -159,11 +159,16 @@ public class TRemindServiceImpl extends ServiceImpl<TRemindMapper, TRemind> impl
     }
 
     @Override
-    public List<TRemind> getBymatterId(Long matterId) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("MATTER_ID", matterId);
-        List<TRemind> tRemind = tRemindMapper.selectByMap(map);
-        return tRemind;
+    public List<TRemind> getBymatterId(TRemind remind) {
+        QueryWrapper<TRemind> queryWrapper = new QueryWrapper<>();
+        queryWrapper.setEntity(remind);
+        List<TRemind> list = tRemindMapper.selectList(queryWrapper);
+        queryWrapper.clear();
+        queryWrapper.eq("MATTER_ID", remind.getMatterId());
+        queryWrapper.eq("IS_ACTIVATE", 1);
+        queryWrapper.eq("USER_BY", 0);
+        list.addAll(tRemindMapper.selectList(queryWrapper));
+        return list;
     }
 
     @Override

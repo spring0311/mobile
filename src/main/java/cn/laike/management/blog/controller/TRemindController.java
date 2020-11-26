@@ -52,13 +52,9 @@ public class TRemindController extends BaseController {
         return new JsonResult<>(OK, tRemindService.findRemindForMatter(remindId));
     }
 
-    @GetMapping("getBymatterId/{matterId}")
-    public JsonResult<List<TRemind>> getTRemindForMatterBymatterId(@PathVariable("matterId") String matterId) {
-        Long matterIds = Long.valueOf(0);
-        if (!(matterId == null) || !(matterId == "")) {
-            matterIds = Long.valueOf(matterId);
-        }
-        return new JsonResult<>(OK, tRemindService.getBymatterId(matterIds));
+    @GetMapping("getBymatterId")
+    public JsonResult<List<TRemind>> getTRemindForMatterBymatterId(TRemind remind) {
+        return new JsonResult<>(OK, tRemindService.getBymatterId(remind));
     }
 
     //http://localhost:8080/remind/add?
