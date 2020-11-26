@@ -2,9 +2,11 @@ package cn.laike.management.blog.controller;
 
 
 import cn.laike.management.blog.entity.TMatter;
+import cn.laike.management.blog.entity.TUserMatter;
 import cn.laike.management.blog.service.TMatterService;
 import cn.laike.management.blog.service.TUserMatterService;
 import cn.laike.management.blog.util.JsonResult;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpSession;
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -87,6 +90,18 @@ public class TMatterController extends BaseController {
     public JsonResult<Void> updateMatter(TMatter tMatter, HttpSession session) {
         tMatter.setUserId(getUidFromSessions(tMatter.getUserId()));
         tMatterService.updateMatter(tMatter);
+        return new JsonResult<>(OK);
+    }
+
+    @GetMapping("finish")
+    public JsonResult<Void> finishMatter(TMatter tMatter) {
+        QueryWrapper<TUserMatter> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("USER_ID", tMatter.getUserId());
+        queryWrapper.eq("MATTER_ID", tMatter.getMatterId());
+        TUserMatter userMatter = new TUserMatter();
+        userMatter.setFinish(tMatter.getFinish());
+        userMatter.setActuallyTime(new Date());
+        tUserMatterService.update(userMatter, queryWrapper);
         return new JsonResult<>(OK);
     }
 

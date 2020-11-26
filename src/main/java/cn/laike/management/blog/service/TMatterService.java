@@ -39,7 +39,12 @@ public interface TMatterService extends IService<TMatter> {
      * @param tMatter
      */
     void updateMatter(TMatter tMatter);
+
+    /**
+     * @param tMatter
+     */
     void updateMatters(TMatter tMatter);
+
     /**
      * 删除
      *

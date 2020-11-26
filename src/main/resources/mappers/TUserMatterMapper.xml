@@ -3,8 +3,7 @@
 <mapper namespace="cn.laike.management.blog.mapper.TUserMatterMapper">
 
     <!--void updateByUserIdAndMatterId(@Param("tUserMatter") TUserMatter tUserMatter);-->
-    <update id="updateByUserIdAndMatterId" parameterType="cn.laike.management.blog.entity.TUserMatter"
-            >
+    <update id="updateByUserIdAndMatterId" parameterType="cn.laike.management.blog.entity.TUserMatter">
         UPDATE
         t_user_matter um
         SET

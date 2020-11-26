@@ -80,7 +80,6 @@ public class TMatterServiceImpl extends ServiceImpl<TMatterMapper, TMatter> impl
         tUserMatter.setFinish(tMatter.getFinish());
         tUserMatter.setUserId(tMatter.getUserId());
         tUserMatter.setSIGN(tMatter.getSIGN());
-        System.err.println(tUserMatter);
         tUserMatterMapper.updateByUserIdAndMatterId(tUserMatter);
         //修改事项信息
         this.saveOrUpdate(tMatter);
